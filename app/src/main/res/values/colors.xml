@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="colorPrimary">#FFFFFF</color>
+    <color name="colorPrimaryDark">#FFFFFF</color>
+    <color name="colorAccent">#FF0DBD8B</color>
+
+    <color name="divider">#FFF3F8FD</color>
+
+    <color name="avatar_fill_1">#FF03B381</color>
+    <color name="avatar_fill_2">#FF368bd6</color>
+    <color name="avatar_fill_3">#FFac3ba8</color>
+
+    <color name="username_1">#368bd6</color>
+    <color name="username_2">#ac3ba8</color>
+    <color name="username_3">#03B381</color>
+    <color name="username_4">#e64f7a</color>
+    <color name="username_5">#ff812d</color>
+    <color name="username_6">#2dc2c5</color>
+    <color name="username_7">#5c56f5</color>
+    <color name="username_8">#74d12c</color>
+
+</resources>

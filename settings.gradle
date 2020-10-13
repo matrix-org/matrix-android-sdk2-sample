@@ -1,0 +1,2 @@
+include ':app'
+rootProject.name = "matrix-sdk-android-2-sample"
