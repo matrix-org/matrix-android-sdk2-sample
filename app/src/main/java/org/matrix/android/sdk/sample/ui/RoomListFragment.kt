@@ -1,13 +1,13 @@
 package org.matrix.android.sdk.sample.ui
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.stfalcon.chatkit.commons.ImageLoader
 import com.stfalcon.chatkit.dialogs.DialogsListAdapter
 import kotlinx.android.synthetic.main.fragment_room_list.*
+import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
@@ -37,7 +37,7 @@ class RoomListFragment : Fragment(), ToolbarConfigurable {
     }
 
     private val imageLoader = ImageLoader { imageView, url, payload ->
-       avatarRenderer.render(url, imageView)
+        avatarRenderer.render(url, imageView)
     }
     private val roomAdapter = DialogsListAdapter<RoomSummaryDialogWrapper>(imageLoader)
 
@@ -61,13 +61,39 @@ class RoomListFragment : Fragment(), ToolbarConfigurable {
         }
 
         // You can also listen to user. Here we listen to ourself to get our avatar
-        session.getUserLive(session.myUserId).observe(viewLifecycleOwner){ user ->
+        session.getUserLive(session.myUserId).observe(viewLifecycleOwner) { user ->
             val userMatrixItem = user.map { it.toMatrixItem() }.getOrNull() ?: return@observe
             avatarRenderer.render(userMatrixItem, toolbarAvatarImageView)
         }
 
+        setHasOptionsMenu(true)
+    }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.main, menu)
+    }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.logout -> {
+                signOut()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun signOut() {
+        session.signOut(true, object : MatrixCallback<Unit> {
+            override fun onSuccess(data: Unit) {
+                SessionHolder.currentSession = null
+                activity?.finish()
+            }
+
+            override fun onFailure(failure: Throwable) {
+                activity?.let { Toast.makeText(it, "Failure: $failure", Toast.LENGTH_SHORT).show() }
+            }
+        })
     }
 
     private fun showRoomDetail(roomSummary: RoomSummary) {
@@ -88,7 +114,5 @@ class RoomListFragment : Fragment(), ToolbarConfigurable {
         }
         roomAdapter.setItems(sortedRoomSummaryList)
     }
-
-
 }
 
