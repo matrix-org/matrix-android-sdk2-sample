@@ -18,8 +18,6 @@ buildscript {
     dependencies {
         classpath "com.android.tools.build:gradle:4.0.1"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        // This is necessary for now, will be removed soon
-        classpath "com.airbnb.okreplay:gradle-plugin:1.5.0"
     }
 }
 
