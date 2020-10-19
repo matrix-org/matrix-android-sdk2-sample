@@ -18,8 +18,6 @@ buildscript {
     dependencies {
         classpath "com.android.tools.build:gradle:4.0.1"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        // This is necessary for now, will be removed soon
-        classpath "com.airbnb.okreplay:gradle-plugin:1.5.0"
     }
 }
 
@@ -39,12 +37,8 @@ allprojects {
 And for your app module build.gradle you should at least include:
 
 ```
- implementation 'com.github.matrix-org:matrix-android-sdk2:v1.0.7'
+ implementation 'com.github.matrix-org:matrix-android-sdk2:v1.0.9'
  implementation('org.jitsi.react:jitsi-meet-sdk:2.9.3') { transitive = true }
-
- debugImplementation 'com.airbnb.okreplay:okreplay:1.5.0'
- releaseImplementation 'com.airbnb.okreplay:noop:1.5.0'
- androidTestImplementation 'com.airbnb.okreplay:espresso:1.5.0'
 ```
 
 ## AndroidManifest.xml file

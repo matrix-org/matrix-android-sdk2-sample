@@ -60,6 +60,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="48dp"
         android:layout_marginBottom="64dp"
+        android:backgroundTint="@color/colorAccent"
         android:text="Login"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -81,5 +82,6 @@
         app:layout_constraintEnd_toEndOf="@+id/homeserverField"
         app:layout_constraintStart_toStartOf="@+id/homeserverField"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.3" />
+        app:layout_constraintVertical_bias="0.3"
+        tools:visibility="visible" />
 </androidx.constraintlayout.widget.ConstraintLayout>
