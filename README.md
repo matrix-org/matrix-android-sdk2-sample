@@ -37,7 +37,7 @@ allprojects {
 And for your app module build.gradle you should at least include:
 
 ```
- implementation 'com.github.matrix-org:matrix-android-sdk2:v1.0.10'
+ implementation 'com.github.matrix-org:matrix-android-sdk2:v1.0.11'
  implementation('org.jitsi.react:jitsi-meet-sdk:2.9.3') { transitive = true }
 ```
 
