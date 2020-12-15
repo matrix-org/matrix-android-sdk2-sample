@@ -16,10 +16,7 @@ import org.matrix.android.sdk.api.NoOpMatrixCallback
 import org.matrix.android.sdk.api.extensions.orTrue
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.read.ReadService
-import org.matrix.android.sdk.api.session.room.timeline.Timeline
-import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
-import org.matrix.android.sdk.api.session.room.timeline.TimelineEventFilters
-import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
+import org.matrix.android.sdk.api.session.room.timeline.*
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.sample.R
 import org.matrix.android.sdk.sample.SessionHolder
@@ -107,7 +104,7 @@ class RoomDetailFragment : Fragment(), Timeline.Listener, ToolbarConfigurable {
                 filterEdits = true,
                 filterUseless = true,
                 filterTypes = true,
-                allowedTypes = TimelineDisplayableEvents.DISPLAYABLE_TYPES
+                allowedTypes = TimelineDisplayableEvents.DISPLAYABLE_TYPES.map { EventTypeFilter(it, null) }
             )
         )
         // Then you can retrieve a timeline from this room.
