@@ -1,6 +1,6 @@
 # matrix-android-sdk2-sample
 
-This is an example project for using the matrix-android-sdk2
+This is an example project for using the [matrix-android-sdk2](https://github.com/matrix-org/matrix-android-sdk2)
 
 
 ## Gradle
