@@ -1,14 +1,11 @@
 package org.matrix.android.sdk.sample.utils
 
-import android.os.Handler
-import android.os.Looper
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListUpdateCallback
 import com.stfalcon.chatkit.commons.models.IMessage
 import com.stfalcon.chatkit.messages.MessagesListAdapter
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.sample.data.TimelineEventMessageWrapper
-import timber.log.Timber
 
 class TimelineEventListProcessor(private val adapter: MessagesListAdapter<IMessage>) {
 
@@ -25,7 +22,7 @@ class TimelineEventListProcessor(private val adapter: MessagesListAdapter<IMessa
         }
 
         override fun onMoved(fromPosition: Int, toPosition: Int) {
-            //noop
+            // noop
         }
 
         override fun onInserted(position: Int, count: Int) {
@@ -38,7 +35,6 @@ class TimelineEventListProcessor(private val adapter: MessagesListAdapter<IMessa
                 val subSnapshot = currentSnapshot.subList(position, position + count)
                 adapter.addToEnd(subSnapshot, false)
             }
-
         }
 
         override fun onRemoved(position: Int, count: Int) {
@@ -58,6 +54,4 @@ class TimelineEventListProcessor(private val adapter: MessagesListAdapter<IMessa
         val diffResult = DiffUtil.calculateDiff(diffCallback)
         diffResult.dispatchUpdatesTo(listUpdateCallback)
     }
-
-
 }

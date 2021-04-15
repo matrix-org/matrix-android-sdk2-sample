@@ -14,8 +14,8 @@
         android:id="@+id/eventSenderAvatarImageView"
         android:layout_width="56dp"
         android:layout_height="56dp"
-        android:layout_marginTop="12dp"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@tools:sample/avatars" />
@@ -37,7 +37,6 @@
         android:layout_marginEnd="8dp"
         android:duplicateParentState="true"
         android:ellipsize="end"
-        tools:text="@tools:sample/full_names"
         android:maxLines="1"
         android:textColor="@android:color/black"
         android:textSize="15sp"
@@ -47,7 +46,8 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toEndOf="@id/eventSenderAvatarImageView"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@tools:sample/full_names" />
 
     <TextView
         android:id="@+id/eventContentView"
@@ -57,10 +57,10 @@
         android:layout_marginEnd="8dp"
         android:textColor="@android:color/black"
         android:textSize="15sp"
-        tools:text="@tools:sample/lorem/random"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/eventSenderNameView"
-        app:layout_constraintTop_toBottomOf="@+id/eventSenderNameView" />
+        app:layout_constraintTop_toBottomOf="@+id/eventSenderNameView"
+        tools:text="@tools:sample/lorem/random" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

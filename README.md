@@ -9,14 +9,14 @@ In your top level build.gradle file, you should have at least:
 
 ```
 buildscript {
-    ext.kotlin_version = "1.4.10"
+    ext.kotlin_version = "1.4.32"
     repositories {
         google()
         jcenter()
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:4.0.1"
+        classpath "com.android.tools.build:gradle:4.1.3"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -26,10 +26,6 @@ allprojects {
         google()
         jcenter()
         maven { url 'https://jitpack.io' }
-        maven {
-        // This is necessary for now, will be removed soon
-            url "https://github.com/vector-im/jitsi_libre_maven/raw/master/android-sdk-2.9.3"
-        }
     }
 }
 ```
@@ -37,8 +33,7 @@ allprojects {
 And for your app module build.gradle you should at least include:
 
 ```
- implementation 'com.github.matrix-org:matrix-android-sdk2:v1.0.12'
- implementation('org.jitsi.react:jitsi-meet-sdk:2.9.3') { transitive = true }
+ implementation 'com.github.matrix-org:matrix-android-sdk2:v1.1.5'
 ```
 
 ## AndroidManifest.xml file

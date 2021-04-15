@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2020 New Vector Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.matrix.android.sdk.sample.ui
 
 import android.os.Bundle
@@ -6,22 +22,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stfalcon.chatkit.commons.ImageLoader
 import com.stfalcon.chatkit.commons.models.IMessage
 import com.stfalcon.chatkit.messages.MessageInput
 import com.stfalcon.chatkit.messages.MessagesListAdapter
-import kotlinx.android.synthetic.main.fragment_room_detail.*
-import org.matrix.android.sdk.api.NoOpMatrixCallback
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.orTrue
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.read.ReadService
 import org.matrix.android.sdk.api.session.room.timeline.*
 import org.matrix.android.sdk.api.util.toMatrixItem
-import org.matrix.android.sdk.sample.R
 import org.matrix.android.sdk.sample.SessionHolder
+import org.matrix.android.sdk.sample.databinding.FragmentRoomDetailBinding
 import org.matrix.android.sdk.sample.utils.*
-
 
 class RoomDetailFragment : Fragment(), Timeline.Listener, ToolbarConfigurable {
 
@@ -31,13 +46,16 @@ class RoomDetailFragment : Fragment(), Timeline.Listener, ToolbarConfigurable {
 
         fun newInstance(roomId: String): RoomDetailFragment {
             val args = bundleOf(
-                Pair(ROOM_ID_ARGS, roomId)
+                    Pair(ROOM_ID_ARGS, roomId)
             )
             return RoomDetailFragment().apply {
                 arguments = args
             }
         }
     }
+
+    private var _views: FragmentRoomDetailBinding? = null
+    private val views get() = _views!!
 
     private val session = SessionHolder.currentSession!!
     private var timeline: Timeline? = null
@@ -59,13 +77,14 @@ class RoomDetailFragment : Fragment(), Timeline.Listener, ToolbarConfigurable {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_room_detail, container, false)
+        _views = FragmentRoomDetailBinding.inflate(inflater, container, false)
+        return views.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        configureToolbar(toolbar, displayBack = true)
-        textComposer.setInputListener {
+        configureToolbar(views.toolbar, displayBack = true)
+        views.textComposer.setInputListener {
             // Sending message can be as simple as that.
             // Timeline will be automatically updated with local echo
             // and when receiving from sync so you don't have anything else to do
@@ -73,7 +92,7 @@ class RoomDetailFragment : Fragment(), Timeline.Listener, ToolbarConfigurable {
             true
         }
 
-        textComposer.setTypingListener(object : MessageInput.TypingListener {
+        views.textComposer.setTypingListener(object : MessageInput.TypingListener {
             override fun onStartTyping() {
                 room?.userIsTyping()
             }
@@ -83,9 +102,9 @@ class RoomDetailFragment : Fragment(), Timeline.Listener, ToolbarConfigurable {
             }
         })
 
-        timelineEventList.setAdapter(adapter)
-        timelineEventList.itemAnimator = null
-        timelineEventList.addOnScrollListener(RecyclerScrollMoreListener(timelineEventList.layoutManager as LinearLayoutManager) {
+        views.timelineEventList.setAdapter(adapter)
+        views.timelineEventList.itemAnimator = null
+        views.timelineEventList.addOnScrollListener(RecyclerScrollMoreListener(views.timelineEventList.layoutManager as LinearLayoutManager) {
             if (timeline?.hasMoreToLoad(Timeline.Direction.BACKWARDS).orTrue()) {
                 timeline?.paginate(Timeline.Direction.BACKWARDS, 50)
             }
@@ -95,17 +114,13 @@ class RoomDetailFragment : Fragment(), Timeline.Listener, ToolbarConfigurable {
         // If the room is not known (not received from sync) it will return null
         room = session.getRoom(roomId)
 
-        room?.markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT, NoOpMatrixCallback())
+        lifecycleScope.launch {
+            room?.markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT)
+        }
 
         // Create some settings to configure timeline
         val timelineSettings = TimelineSettings(
-            initialSize = 30,
-            filters = TimelineEventFilters(
-                filterEdits = true,
-                filterUseless = true,
-                filterTypes = true,
-                allowedTypes = TimelineDisplayableEvents.DISPLAYABLE_TYPES.map { EventTypeFilter(it, null) }
-            )
+                initialSize = 30
         )
         // Then you can retrieve a timeline from this room.
         timeline = room?.createTimeline(null, timelineSettings)?.also {
@@ -117,11 +132,10 @@ class RoomDetailFragment : Fragment(), Timeline.Listener, ToolbarConfigurable {
         // You can also listen to room summary from the room
         room?.getRoomSummaryLive()?.observe(viewLifecycleOwner) { roomSummary ->
             val roomSummaryAsMatrixItem =
-                roomSummary.map { it.toMatrixItem() }.getOrNull() ?: return@observe
-            avatarRenderer.render(roomSummaryAsMatrixItem, toolbarAvatarImageView)
-            toolbarTitleView.text = roomSummaryAsMatrixItem.getBestName()
+                    roomSummary.map { it.toMatrixItem() }.getOrNull() ?: return@observe
+            avatarRenderer.render(roomSummaryAsMatrixItem, views.toolbarAvatarImageView)
+            views.toolbarTitleView.text = roomSummaryAsMatrixItem.getBestName()
         }
-
     }
 
     override fun onDestroyView() {
@@ -151,6 +165,4 @@ class RoomDetailFragment : Fragment(), Timeline.Listener, ToolbarConfigurable {
         // You probably want to process with DiffUtil before dispatching to your recyclerview
         timelineEventListProcessor.onNewSnapshot(snapshot)
     }
-
-
 }

@@ -1,13 +1,29 @@
+/*
+ * Copyright (c) 2020 New Vector Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.matrix.android.sdk.sample.ui
 
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.stfalcon.chatkit.commons.ImageLoader
 import com.stfalcon.chatkit.dialogs.DialogsListAdapter
-import kotlinx.android.synthetic.main.fragment_room_list.*
-import org.matrix.android.sdk.api.MatrixCallback
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
@@ -15,10 +31,10 @@ import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.sample.R
 import org.matrix.android.sdk.sample.SessionHolder
 import org.matrix.android.sdk.sample.data.RoomSummaryDialogWrapper
+import org.matrix.android.sdk.sample.databinding.FragmentRoomListBinding
 import org.matrix.android.sdk.sample.formatter.RoomListDateFormatter
 import org.matrix.android.sdk.sample.utils.AvatarRenderer
 import org.matrix.android.sdk.sample.utils.MatrixItemColorProvider
-
 
 class RoomListFragment : Fragment(), ToolbarConfigurable {
 
@@ -29,8 +45,12 @@ class RoomListFragment : Fragment(), ToolbarConfigurable {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_room_list, container, false)
+        _views = FragmentRoomListBinding.inflate(inflater, container, false)
+        return views.root
     }
+
+    private var _views: FragmentRoomListBinding? = null
+    private val views get() = _views!!
 
     private val avatarRenderer by lazy {
         AvatarRenderer(MatrixItemColorProvider(resources))
@@ -43,8 +63,8 @@ class RoomListFragment : Fragment(), ToolbarConfigurable {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        configureToolbar(toolbar, displayBack = false)
-        roomSummaryList.setAdapter(roomAdapter)
+        configureToolbar(views.toolbar, displayBack = false)
+        views.roomSummaryList.setAdapter(roomAdapter)
         roomAdapter.setDatesFormatter(RoomListDateFormatter())
         roomAdapter.setOnDialogClickListener {
             showRoomDetail(it.roomSummary)
@@ -63,7 +83,7 @@ class RoomListFragment : Fragment(), ToolbarConfigurable {
         // You can also listen to user. Here we listen to ourself to get our avatar
         session.getUserLive(session.myUserId).observe(viewLifecycleOwner) { user ->
             val userMatrixItem = user.map { it.toMatrixItem() }.getOrNull() ?: return@observe
-            avatarRenderer.render(userMatrixItem, toolbarAvatarImageView)
+            avatarRenderer.render(userMatrixItem, views.toolbarAvatarImageView)
         }
 
         setHasOptionsMenu(true)
@@ -84,16 +104,19 @@ class RoomListFragment : Fragment(), ToolbarConfigurable {
     }
 
     private fun signOut() {
-        session.signOut(true, object : MatrixCallback<Unit> {
-            override fun onSuccess(data: Unit) {
-                SessionHolder.currentSession = null
-                activity?.finish()
+        lifecycleScope.launch {
+            try {
+                session.signOut(true)
+            } catch (failure: Throwable) {
+                activity?.let {
+                    Toast.makeText(it, "Failure: $failure", Toast.LENGTH_SHORT).show()
+                }
+                return@launch
             }
 
-            override fun onFailure(failure: Throwable) {
-                activity?.let { Toast.makeText(it, "Failure: $failure", Toast.LENGTH_SHORT).show() }
-            }
-        })
+            SessionHolder.currentSession = null
+            activity?.finish()
+        }
     }
 
     private fun showRoomDetail(roomSummary: RoomSummary) {
@@ -115,4 +138,3 @@ class RoomListFragment : Fragment(), ToolbarConfigurable {
         roomAdapter.setItems(sortedRoomSummaryList)
     }
 }
-

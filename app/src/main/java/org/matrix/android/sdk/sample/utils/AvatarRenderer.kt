@@ -31,7 +31,7 @@ class AvatarRenderer(private val matrixItemColorProvider: MatrixItemColorProvide
         private const val THUMBNAIL_SIZE = 250
     }
 
-    fun render(avatarUrl: String?, imageView: ImageView){
+    fun render(avatarUrl: String?, imageView: ImageView) {
         val resolvedUrl = resolvedUrl(avatarUrl)
         Picasso.get()
             .load(resolvedUrl)
@@ -49,7 +49,6 @@ class AvatarRenderer(private val matrixItemColorProvider: MatrixItemColorProvide
             .into(imageView)
     }
 
-
     fun getPlaceholderDrawable(matrixItem: MatrixItem): Drawable {
         val avatarColor = matrixItemColorProvider.getColor(matrixItem)
         return TextDrawable.builder()
@@ -58,7 +57,6 @@ class AvatarRenderer(private val matrixItemColorProvider: MatrixItemColorProvide
             .endConfig()
             .buildRound(matrixItem.firstLetterOfDisplayName(), avatarColor)
     }
-
 
     // PRIVATE API *********************************************************************************
 

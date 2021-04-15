@@ -20,9 +20,9 @@ import android.content.res.Resources
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.annotation.VisibleForTesting
+import kotlin.math.abs
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.sample.R
-import kotlin.math.abs
 
 class MatrixItemColorProvider(private val resources: Resources) {
     private val cache = mutableMapOf<String, Int>()

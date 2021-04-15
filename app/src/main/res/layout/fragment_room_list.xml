@@ -33,10 +33,10 @@
                 android:layout_marginEnd="32dp"
                 android:ellipsize="end"
                 android:maxLines="1"
+                android:text="Room list"
                 android:textColor="@android:color/black"
                 android:textSize="20sp"
-                android:textStyle="bold"
-                android:text="Room list" />
+                android:textStyle="bold" />
 
         </LinearLayout>
 
