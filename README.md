@@ -9,7 +9,7 @@ In your top level build.gradle file, you should have at least:
 
 ```
 buildscript {
-    ext.kotlin_version = "1.4.32"
+    ext.kotlin_version = "1.5.10"
     repositories {
         google()
         jcenter()
