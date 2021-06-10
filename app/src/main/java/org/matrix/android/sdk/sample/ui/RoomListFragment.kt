@@ -53,10 +53,10 @@ class RoomListFragment : Fragment(), ToolbarConfigurable {
     private val views get() = _views!!
 
     private val avatarRenderer by lazy {
-        AvatarRenderer(MatrixItemColorProvider(resources))
+        AvatarRenderer(MatrixItemColorProvider(requireContext()))
     }
 
-    private val imageLoader = ImageLoader { imageView, url, payload ->
+    private val imageLoader = ImageLoader { imageView, url, _ ->
         avatarRenderer.render(url, imageView)
     }
     private val roomAdapter = DialogsListAdapter<RoomSummaryDialogWrapper>(imageLoader)

@@ -62,10 +62,10 @@ class RoomDetailFragment : Fragment(), Timeline.Listener, ToolbarConfigurable {
     private var room: Room? = null
 
     private val avatarRenderer by lazy {
-        AvatarRenderer(MatrixItemColorProvider(resources))
+        AvatarRenderer(MatrixItemColorProvider(requireContext()))
     }
 
-    private val imageLoader = ImageLoader { imageView, url, payload ->
+    private val imageLoader = ImageLoader { imageView, url, _ ->
         avatarRenderer.render(url, imageView)
     }
 

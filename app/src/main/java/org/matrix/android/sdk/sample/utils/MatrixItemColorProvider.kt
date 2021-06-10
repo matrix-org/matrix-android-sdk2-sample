@@ -16,21 +16,23 @@
 
 package org.matrix.android.sdk.sample.utils
 
-import android.content.res.Resources
+import android.content.Context
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.annotation.VisibleForTesting
-import kotlin.math.abs
+import androidx.core.content.ContextCompat
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.sample.R
+import kotlin.math.abs
 
-class MatrixItemColorProvider(private val resources: Resources) {
+class MatrixItemColorProvider(private val context: Context) {
     private val cache = mutableMapOf<String, Int>()
 
     @ColorInt
     fun getColor(matrixItem: MatrixItem): Int {
         return cache.getOrPut(matrixItem.id) {
-            resources.getColor(
+            ContextCompat.getColor(
+                context,
                 when (matrixItem) {
                     is MatrixItem.UserItem -> getColorFromUserId(matrixItem.id)
                     else -> getColorFromRoomId(matrixItem.id)
@@ -45,7 +47,7 @@ class MatrixItemColorProvider(private val resources: Resources) {
         fun getColorFromUserId(userId: String?): Int {
             var hash = 0
 
-            userId?.toList()?.map { chr -> hash = (hash shl 5) - hash + chr.toInt() }
+            userId?.toList()?.map { chr -> hash = (hash shl 5) - hash + chr.code }
 
             return when (abs(hash) % 8) {
                 1 -> R.color.username_2
@@ -61,7 +63,7 @@ class MatrixItemColorProvider(private val resources: Resources) {
 
         @ColorRes
         private fun getColorFromRoomId(roomId: String?): Int {
-            return when ((roomId?.toList()?.sumBy { it.toInt() } ?: 0) % 3) {
+            return when ((roomId?.toList()?.sumOf { it.code } ?: 0) % 3) {
                 1 -> R.color.avatar_fill_2
                 2 -> R.color.avatar_fill_3
                 else -> R.color.avatar_fill_1
