@@ -9,10 +9,9 @@ In your top level build.gradle file, you should have at least:
 
 ```
 buildscript {
-    ext.kotlin_version = "1.5.10"
+    ext.kotlin_version = "1.5.30"
     repositories {
         google()
-        jcenter()
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
     }
     dependencies {
@@ -24,7 +23,6 @@ buildscript {
 allprojects {
     repositories {
         google()
-        jcenter()
         maven { url 'https://jitpack.io' }
     }
 }
