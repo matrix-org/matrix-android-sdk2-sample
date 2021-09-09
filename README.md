@@ -31,7 +31,7 @@ allprojects {
 And for your app module build.gradle you should at least include:
 
 ```
- implementation 'com.github.matrix-org:matrix-android-sdk2:v1.1.5'
+ implementation 'org.matrix.android:matrix-android-sdk2:1.2.1'
 ```
 
 ## AndroidManifest.xml file
