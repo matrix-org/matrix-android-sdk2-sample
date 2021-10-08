@@ -134,7 +134,9 @@ class RoomDetailFragment : Fragment(), Timeline.Listener, ToolbarConfigurable {
             val roomSummaryAsMatrixItem =
                     roomSummary.map { it.toMatrixItem() }.getOrNull() ?: return@observe
             avatarRenderer.render(roomSummaryAsMatrixItem, views.toolbarAvatarImageView)
-            views.toolbarTitleView.text = roomSummaryAsMatrixItem.getBestName()
+            views.toolbarTitleView.text = roomSummaryAsMatrixItem.let {
+                it.displayName?.takeIf { dn -> dn.isNotBlank() } ?: it.id
+            }
         }
     }
 
