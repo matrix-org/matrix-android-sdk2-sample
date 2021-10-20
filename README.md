@@ -9,14 +9,14 @@ In your top level build.gradle file, you should have at least:
 
 ```
 buildscript {
-    ext.kotlin_version = "1.5.30"
+    ext.kotlin_version = "1.5.31"
     repositories {
         google()
         jcenter()
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:4.1.3"
+        classpath "com.android.tools.build:gradle:7.0.3"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -40,7 +40,7 @@ replace `x.y.z by the latest version: ![Latest version](https://img.shields.io/m
 
 ## AndroidManifest.xml file
 
-Your application should at least contains the provider "WorkManagerInitializer" with tools:node="remove" as below
+Your application should at least contains the provider "InitializationProvider" to remove initialiwation of the WorkManager as below
 
 ```
 <application
@@ -56,10 +56,16 @@ Your application should at least contains the provider "WorkManagerInitializer" 
 
         // This is required as the WorkManager is already initialized by the SDK
         <provider
-            android:name="androidx.work.impl.WorkManagerInitializer"
-            android:authorities="${applicationId}.workmanager-init"
-            tools:node="remove"
-            tools:ignore="MissingClass" />
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            tools:ignore="MissingClass"
+            tools:node="merge">
+            <meta-data
+                android:name="androidx.work.WorkManagerInitializer"
+                android:value="androidx.startup"
+                tools:node="remove" />
+        </provider>
 
     </application>
     
