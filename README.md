@@ -7,7 +7,7 @@ This is an example project for using the [matrix-android-sdk2](https://github.co
 
 In your top level build.gradle file, you should have at least:
 
-```
+```gradle
 buildscript {
     ext.kotlin_version = "1.6.0"
     repositories {
@@ -32,7 +32,7 @@ allprojects {
 
 And for your app module build.gradle you should at least include:
 
-```
+```gradle
  implementation 'org.matrix.android:matrix-android-sdk2:x.y.z'
 ```
 
@@ -42,7 +42,7 @@ replace `x.y.z by the latest version: ![Latest version](https://img.shields.io/m
 
 Your application should at least contains the provider "InitializationProvider" to remove initialiwation of the WorkManager as below
 
-```
+```xml
 <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -51,7 +51,7 @@ Your application should at least contains the provider "InitializationProvider" 
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        
+
         [...]
 
         // This is required as the WorkManager is already initialized by the SDK
@@ -68,12 +68,12 @@ Your application should at least contains the provider "InitializationProvider" 
         </provider>
 
     </application>
-    
+
 ```
 
 ## Code
 
-Please have a look in the following files to know how to start using the sdk: 
+Please have a look in the following files to know how to start using the sdk:
 
 [SampleApp](app/src/main/java/org/matrix/android/sdk/sample/SampleApp.kt)
 
