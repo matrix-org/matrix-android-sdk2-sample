@@ -36,7 +36,7 @@ And for your app module build.gradle you should at least include:
  implementation 'org.matrix.android:matrix-android-sdk2:x.y.z'
 ```
 
-replace `x.y.z by the latest version: ![Latest version](https://img.shields.io/maven-central/v/org.matrix.android/matrix-android-sdk2)
+replace `x.y.z` by the latest version: ![Latest version](https://img.shields.io/maven-central/v/org.matrix.android/matrix-android-sdk2)
 
 ## AndroidManifest.xml file
 
