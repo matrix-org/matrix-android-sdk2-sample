@@ -25,9 +25,9 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
-import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.sample.R
+import org.matrix.android.sdk.sample.SampleApp
 import org.matrix.android.sdk.sample.SessionHolder
 import org.matrix.android.sdk.sample.databinding.FragmentLoginBinding
 
@@ -77,7 +77,7 @@ class SimpleLoginFragment : Fragment() {
         //
         viewLifecycleOwner.lifecycleScope.launch {
             try {
-                Matrix.getInstance(requireContext()).authenticationService().directAuthentication(
+                SampleApp.getMatrix(requireContext()).authenticationService().directAuthentication(
                     homeServerConnectionConfig,
                     username,
                     password,

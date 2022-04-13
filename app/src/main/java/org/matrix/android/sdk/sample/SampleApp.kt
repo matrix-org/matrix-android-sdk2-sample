@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.sample
 
 import android.app.Application
+import android.content.Context
 import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.sample.util.RoomDisplayNameFallbackProviderImpl
@@ -27,15 +28,8 @@ class SampleApp : Application() {
     override fun onCreate() {
         super.onCreate()
         Timber.plant(Timber.DebugTree())
-        // You should first init Matrix before using it
-        Matrix.initialize(
-            context = this,
-            matrixConfiguration = MatrixConfiguration(
-                roomDisplayNameFallbackProvider = RoomDisplayNameFallbackProviderImpl()
-            )
-        )
-        // It returns a singleton
-        val matrix = Matrix.getInstance(this)
+        // You should first create a Matrix instance before using it
+        createMatrix()
         // You can then grab the authentication service and search for a known session
         val lastSession = matrix.authenticationService().getLastAuthenticatedSession()
         if (lastSession != null) {
@@ -44,6 +38,23 @@ class SampleApp : Application() {
 
             lastSession.open()
             lastSession.startSync(true)
+        }
+    }
+
+    private lateinit var matrix: Matrix
+
+    private fun createMatrix() {
+        matrix = Matrix.createInstance(
+            context = this,
+            matrixConfiguration = MatrixConfiguration(
+                roomDisplayNameFallbackProvider = RoomDisplayNameFallbackProviderImpl()
+            )
+        )
+    }
+
+    companion object {
+        fun getMatrix(context: Context): Matrix {
+            return (context.applicationContext as SampleApp).matrix
         }
     }
 }
