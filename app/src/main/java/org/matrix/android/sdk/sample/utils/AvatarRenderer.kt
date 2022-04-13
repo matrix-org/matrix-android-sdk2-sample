@@ -49,7 +49,7 @@ class AvatarRenderer(private val matrixItemColorProvider: MatrixItemColorProvide
             .into(imageView)
     }
 
-    fun getPlaceholderDrawable(matrixItem: MatrixItem): Drawable {
+    private fun getPlaceholderDrawable(matrixItem: MatrixItem): Drawable {
         val avatarColor = matrixItemColorProvider.getColor(matrixItem)
         return TextDrawable.builder()
             .beginConfig()

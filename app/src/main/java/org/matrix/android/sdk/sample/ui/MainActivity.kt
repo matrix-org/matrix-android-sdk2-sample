@@ -20,19 +20,15 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.sample.R
 import org.matrix.android.sdk.sample.SessionHolder
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var matrix: Matrix
-
     override fun onCreate(savedInstanceState: Bundle?) {
         window.statusBarColor = ContextCompat.getColor(this, R.color.divider)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        matrix = Matrix.getInstance(this)
         if (savedInstanceState == null) {
             if (SessionHolder.currentSession != null) {
                 displayRoomList()

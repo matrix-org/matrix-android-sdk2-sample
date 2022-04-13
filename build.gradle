@@ -20,6 +20,11 @@ allprojects {
         jcenter()
         maven { url 'https://jitpack.io' }
     }
+
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+        // Stop ignoring warnings to force stopping usage of deprecated API from the SDK
+        kotlinOptions.allWarningsAsErrors = true
+    }
 }
 
 task clean(type: Delete) {
