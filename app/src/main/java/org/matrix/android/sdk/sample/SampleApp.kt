@@ -25,6 +25,8 @@ import timber.log.Timber
 
 class SampleApp : Application() {
 
+    private lateinit var matrix: Matrix
+
     override fun onCreate() {
         super.onCreate()
         Timber.plant(Timber.DebugTree())
@@ -40,8 +42,6 @@ class SampleApp : Application() {
             lastSession.startSync(true)
         }
     }
-
-    private lateinit var matrix: Matrix
 
     private fun createMatrix() {
         matrix = Matrix.createInstance(
