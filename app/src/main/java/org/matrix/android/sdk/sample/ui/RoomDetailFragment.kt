@@ -30,6 +30,7 @@ import com.stfalcon.chatkit.messages.MessageInput
 import com.stfalcon.chatkit.messages.MessagesListAdapter
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.orTrue
+import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.read.ReadService
 import org.matrix.android.sdk.api.session.room.timeline.*
@@ -88,17 +89,17 @@ class RoomDetailFragment : Fragment(), Timeline.Listener, ToolbarConfigurable {
             // Sending message can be as simple as that.
             // Timeline will be automatically updated with local echo
             // and when receiving from sync so you don't have anything else to do
-            room?.sendTextMessage(it)
+            room?.sendService()?.sendTextMessage(it)
             true
         }
 
         views.textComposer.setTypingListener(object : MessageInput.TypingListener {
             override fun onStartTyping() {
-                room?.userIsTyping()
+                room?.typingService()?.userIsTyping()
             }
 
             override fun onStopTyping() {
-                room?.userStopsTyping()
+                room?.typingService()?.userStopsTyping()
             }
         })
 
@@ -115,7 +116,7 @@ class RoomDetailFragment : Fragment(), Timeline.Listener, ToolbarConfigurable {
         room = session.getRoom(roomId)
 
         lifecycleScope.launch {
-            room?.markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT)
+            room?.readService()?.markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT)
         }
 
         // Create some settings to configure timeline
@@ -123,7 +124,7 @@ class RoomDetailFragment : Fragment(), Timeline.Listener, ToolbarConfigurable {
                 initialSize = 30
         )
         // Then you can retrieve a timeline from this room.
-        timeline = room?.createTimeline(null, timelineSettings)?.also {
+        timeline = room?.timelineService()?.createTimeline(null, timelineSettings)?.also {
             // Don't forget to add listener and start the timeline so it start listening to changes
             it.addListener(this)
             it.start()

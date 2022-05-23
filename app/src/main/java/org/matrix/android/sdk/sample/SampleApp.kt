@@ -44,7 +44,7 @@ class SampleApp : Application() {
     }
 
     private fun createMatrix() {
-        matrix = Matrix.createInstance(
+        matrix = Matrix(
             context = this,
             matrixConfiguration = MatrixConfiguration(
                 roomDisplayNameFallbackProvider = RoomDisplayNameFallbackProviderImpl()

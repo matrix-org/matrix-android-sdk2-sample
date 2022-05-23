@@ -75,13 +75,13 @@ class RoomListFragment : Fragment(), ToolbarConfigurable {
             memberships = Membership.activeMemberships()
         }
         // Then you can subscribe to livedata..
-        session.getRoomSummariesLive(roomSummariesQuery).observe(viewLifecycleOwner) {
+        session.roomService().getRoomSummariesLive(roomSummariesQuery).observe(viewLifecycleOwner) {
             // ... And refresh your adapter with the list. It will be automatically updated when an item of the list is changed.
             updateRoomList(it)
         }
 
         // You can also listen to user. Here we listen to ourself to get our avatar
-        session.getUserLive(session.myUserId).observe(viewLifecycleOwner) { user ->
+        session.userService().getUserLive(session.myUserId).observe(viewLifecycleOwner) { user ->
             val userMatrixItem = user.map { it.toMatrixItem() }.getOrNull() ?: return@observe
             avatarRenderer.render(userMatrixItem, views.toolbarAvatarImageView)
         }
@@ -106,7 +106,7 @@ class RoomListFragment : Fragment(), ToolbarConfigurable {
     private fun signOut() {
         lifecycleScope.launch {
             try {
-                session.signOut(true)
+                session.signOutService().signOut(true)
             } catch (failure: Throwable) {
                 activity?.let {
                     Toast.makeText(it, "Failure: $failure", Toast.LENGTH_SHORT).show()
