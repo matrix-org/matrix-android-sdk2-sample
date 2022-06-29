@@ -39,7 +39,7 @@ class SampleApp : Application() {
             // Don't forget to open the session and start syncing.
 
             lastSession.open()
-            lastSession.startSync(true)
+            lastSession.syncService().startSync(true)
         }
     }
 

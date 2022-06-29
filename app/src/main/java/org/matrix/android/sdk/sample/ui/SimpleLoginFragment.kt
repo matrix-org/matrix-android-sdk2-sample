@@ -95,7 +95,7 @@ class SimpleLoginFragment : Fragment() {
                 ).show()
                 SessionHolder.currentSession = session
                 session.open()
-                session.startSync(true)
+                session.syncService().startSync(true)
                 displayRoomList()
             }
         }
