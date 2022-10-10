@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 android {
+    namespace 'org.matrix.android.sdk.sample'
     compileSdkVersion 33
 
     defaultConfig {
@@ -45,7 +46,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'com.google.android.material:material:1.6.1'
 
-    implementation 'org.matrix.android:matrix-android-sdk2:1.5.1'
+    implementation 'org.matrix.android:matrix-android-sdk2:1.5.2'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
 
     implementation 'com.squareup.picasso:picasso:2.71828'
