@@ -40,4 +40,6 @@ class RoomDisplayNameFallbackProviderImpl : RoomDisplayNameFallbackProvider {
 
     override fun getNameFor4membersAndMore(name1: String, name2: String, name3: String, remainingCount: Int) =
         "$name1, $name2, $name3 and $remainingCount others"
+
+    override fun excludedUserIds(roomId: String): List<String>  = emptyList()
 }
